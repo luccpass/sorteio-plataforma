@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/styles/style.css">
+    <title>Contagem Regressiva</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #171819;
+            font-family: Arial, sans-serif;
+        }
+
+        .countdown {
+            font-size: 500px;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown" id="countdown">5</div>
+
+    <script>
+        // countdown.js
+
+// Função para iniciar o contador regressivo
+function startCountdown() {
+    let seconds = 5;
+    const countdownElement = document.querySelector('.countdown');
+    countdownElement.textContent = seconds;
+
+    const countdownInterval = setInterval(() => {
+        seconds--;
+        if (seconds >= 0) {
+            countdownElement.textContent = seconds;
+        }
+        if (seconds === 0) {
+            clearInterval(countdownInterval);
+            const participants = JSON.parse(localStorage.getItem('participants')) || [];
+            const winnerIndex = Math.floor(Math.random() * participants.length);
+            const winner = participants[winnerIndex];
+            localStorage.setItem('lastWinner', winner);
+            window.location.href = 'winner-page.html';
+        }
+    }, 1000);
+}
+
+// Inicia o contador regressivo quando a página é carregada
+startCountdown();
+
+    </script>
+</body>
+</html>

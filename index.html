@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/styles/style.css">
+    <title>Pagina Ganhador</title>
+</head>
+<body>
+    <div id="container">
+
+        <div class="list-participants">
+            <table>
+                <caption>Lista de Participantes</caption>
+
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Ações</th> <!-- Adicionando uma coluna para ações -->
+                    </tr>
+                </thead>
+
+                <tbody id="participants-table">
+                   
+                </tbody>
+            </table>
+        </div>
+
+        <div class="button-wrapper">
+            <button class="btn-trans" onclick="startCountdown()">Iniciar Sorteio</button>
+            <button class="btn-blue" onclick="importParticipants()">Importar Participantes</button>
+        </div>
+
+    </div>
+    
+    <script>
+       // main.js
+
+// Função para importar participantes do arquivo JSON e salvar no localStorage
+function importParticipants() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const jsonData = JSON.parse(e.target.result);
+            const names = jsonData.map(item => item.nome);
+            let participants = JSON.parse(localStorage.getItem('participants')) || [];
+            participants = [...new Set([...participants, ...names])]; // Removendo duplicatas
+            localStorage.setItem('participants', JSON.stringify(participants));
+            displayParticipants(); // Atualiza a exibição dos participantes na tabela
+        }
+        reader.readAsText(file);
+    }
+    input.click();
+}
+
+// Função para iniciar a contagem regressiva
+function startCountdown() {
+    const participants = JSON.parse(localStorage.getItem('participants')) || [];
+    if (participants.length === 0) {
+        alert('Nenhum participante importado.');
+        return;
+    }
+
+    window.location.href = 'countdown.html';
+}
+
+// Função para exibir os participantes na tabela
+function displayParticipants() {
+    const participants = JSON.parse(localStorage.getItem('participants')) || [];
+    const tableBody = document.getElementById('participants-table');
+    tableBody.innerHTML = '';
+
+    participants.forEach((participant, index) => {
+        const row = document.createElement('tr');
+        
+        const nameCell = document.createElement('td');
+        nameCell.textContent = participant;
+        row.appendChild(nameCell);
+        
+        const actionsCell = document.createElement('td');
+        
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.onclick = function() {
+            const newName = prompt('Digite o novo nome:', participant);
+            if (newName && newName !== participant) {
+                participants[index] = newName;
+                localStorage.setItem('participants', JSON.stringify(participants));
+                displayParticipants();
+            }
+        };
+        actionsCell.appendChild(editButton);
+        
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Excluir';
+        deleteButton.onclick = function() {
+            participants.splice(index, 1);
+            localStorage.setItem('participants', JSON.stringify(participants));
+            displayParticipants();
+        };
+        actionsCell.appendChild(deleteButton);
+
+        row.appendChild(actionsCell);
+        
+        tableBody.appendChild(row);
+    });
+}
+
+// Chama a função para exibir os participantes na tabela quando a página é carregada
+displayParticipants();
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/styles/style.css">
+
+
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        <div class="countdown-page" style="display: none;">
+            <span class="countdown" id="countdown"></span>
+            <audio src="/"></audio>
+        </div>
+    
+        <div class="winner-page">
+            <h1>E o ganhador foi : </h1>
+    
+            <div class="winner-container">
+                <div class="svg">
+                    <svg width="1325" height="232" viewBox="0 0 1325 232" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0H232V178.64H0L104.4 89.32L0 0Z" fill="#AA480F"/>
+                        <path opacity="0.9" d="M1324.72 178.64L1092.72 178.64V4.52995e-06L1324.72 4.52995e-06L1220.32 89.32L1324.72 178.64Z" fill="#AA480F"/>
+                        <path d="M208.8 0H1108.96V206C1108.96 220.359 1097.32 232 1082.96 232H234.8C220.441 232 208.8 220.359 208.8 206V0Z" fill="#D65911"/>
+                    </svg>
+                </div>
+    
+                <h2 id="winner-name"></h2>
+            </div>
+    
+            <div class="winner-page__buttons">
+                <button class="btn-trans" onclick="startCountdown()">Sortear Novamente</button>
+                <button class="btn-blue" onclick="goToIndex()">Pagina Inicial</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        confetti()
+        setInterval(() => {
+            confetti()
+        }, 2000)
+        setInterval(() => {
+            confetti()
+        }, 2000)
+        setInterval(() => {
+            confetti()
+        }, 2000)
+
+
+// winner-page.js
+
+// Função para mostrar o vencedor
+function showWinner() {
+    const lastWinner = localStorage.getItem('lastWinner');
+    document.getElementById('winner-name').textContent = lastWinner;
+}
+
+// Função para iniciar a contagem regressiva
+function startCountdown() {
+    window.location.href = 'countdown.html';
+}
+
+// Função para ir para a página inicial
+function goToIndex() {
+    window.location.href = 'index.html';
+}
+
+// Inicia a exibição do vencedor quando a página é carregada
+showWinner();
+
+</script>
+
+</body>
+</html>
